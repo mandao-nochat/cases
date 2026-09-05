@@ -205,8 +205,8 @@ const FALLBACK_CONFIG = {
     teaching: { label:"教学反馈", 核心:"真正的关键线索不在「缺什么」里，而在「他怎么描述自己」里——语气、措辞、那些被轻轻带过的话。" }
   },
   stage_3: {
-    title: "四方支招",
-    prompt: "信息版图已经补全。四位群友各自开出了方子——点击对应的框，查看沿这个方向追问下去的结果。四个都听听，再下判断。",
+    title: "场景追问",
+    prompt: "信息版图已经补全。现在代入咨询师的视角——你最想先追问哪一位？点击对应的框，听听沿这个方向问下去会得到什么。",
     ask_count_total: 5,
     ask_count_label: "追问次数",
     options: [
@@ -250,10 +250,10 @@ const FALLBACK_CONFIG = {
       ]
     },
     quotes: [
-      { text:"对智人来说，没有比控制体重更容易做到的事了——因为这个事不需要依赖任何外人，也不需要控制别人。", by:"群主 · 明心" },
-      { text:"哪怕一个残缺的灵魂，都需要一副健康的身体。", by:"群主 · 明心" },
-      { text:"210 减到 160，精力条能翻一倍。", by:"教练 · 小飞" },
-      { text:"只要是做了，就远远大于脑子里只是想做。", by:"群友 · Honye" }
+      { text:"对智人来说，没有比控制体重更容易做到的事了——因为这个事不需要依赖任何外人，也不需要控制别人。" },
+      { text:"哪怕一个残缺的灵魂，都需要一副健康的身体。" },
+      { text:"210 减到 160，精力条能翻一倍。" },
+      { text:"只要是做了，就远远大于脑子里只是想做。" }
     ],
     funnel: {
       title: "雄关漫道真如铁，而今迈步从头越",
@@ -568,7 +568,7 @@ function renderStage3() {
 
   return `
     <div class="stage-card">
-      <div class="stage-label">阶段 3 · 四 方 支 招</div>
+      <div class="stage-label">阶段 3 · 场 景 追 问</div>
       <div class="stage-title">${escapeHtml(s.title)}</div>
       <div class="stage-subtitle">${escapeHtml(s.prompt)}</div>
       <div>${opts}</div>
@@ -623,8 +623,7 @@ function renderStage5() {
   const conclusionItems = s.conclusion.items.map(t => `<li style="margin-bottom:8px">${escapeHtml(t)}</li>`).join('');
   const quotesHtml = s.quotes.map(q => `
     <div class="quote-card">
-      <div class="quote-text">"${escapeHtml(q.text)}"</div>
-      <div class="quote-by">— ${escapeHtml(q.by)}</div>
+      <div class="quote-text">${escapeHtml(q.text)}</div>
     </div>
   `).join('');
 
@@ -688,7 +687,7 @@ ${CFG.subtitle}
   选择：${chose2List.length > 0 ? chose2List.map(o => o.text).join(' / ') : '（未选）'}
   命中关键线索：${hit2}/${critical2Total}
 
-阶段 3 · 四方支招
+阶段 3 · 场景追问
   听取顺序：${chose3List.length > 0 ? chose3List.map(o => o.label).join(' → ') : '（未听）'}
   直觉倾向：${first3 ? first3.label : '—'}
 

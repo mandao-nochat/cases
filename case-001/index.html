@@ -28,6 +28,8 @@
 body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;padding:24px 16px 80px}
 .container{max-width:880px;margin:0 auto}
 .brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:13px;color:var(--text-muted);font-weight:500}
+.brand .back-link{margin-left:auto;color:var(--primary);text-decoration:none;font-weight:600;font-size:12.5px;padding:6px 12px;border:1px solid rgba(77,107,254,.3);border-radius:999px;transition:all .2s;white-space:nowrap}
+.brand .back-link:hover{background:var(--primary-bg);border-color:var(--primary)}
 .brand-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
 .brand-name{color:var(--primary);font-weight:700;letter-spacing:.5px}
 .case-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:1.5px;padding:5px 12px;background:rgba(77,107,254,.12);color:var(--primary-dark);border-radius:9999px;margin-bottom:14px;text-transform:uppercase}
@@ -139,6 +141,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
     <span class="brand-dot"></span>
     <span class="brand-name">拆案台</span>
     <span>· 「漫道」群 职场问答系列</span>
+    <a class="back-link" href="../index.html">往期拆案 →</a>
   </div>
 
   <div id="progress-bar" class="progress-bar" style="display:none">
@@ -202,8 +205,8 @@ const FALLBACK_CONFIG = {
     teaching: { label:"教学反馈", 核心:"真正的关键线索不在「缺什么」里，而在「他怎么描述自己」里——语气、措辞、那些被轻轻带过的话。" }
   },
   stage_3: {
-    title: "场景追问",
-    prompt: "信息版图已经补全。现在代入咨询师的视角——优先追问哪一位的方向？",
+    title: "四方支招",
+    prompt: "信息版图已经补全。四位群友各自开出了方子——点击对应的框，查看沿这个方向追问下去的结果。四个都听听，再下判断。",
     ask_count_total: 5,
     ask_count_label: "追问次数",
     options: [
@@ -565,7 +568,7 @@ function renderStage3() {
 
   return `
     <div class="stage-card">
-      <div class="stage-label">阶段 3 · 场 景 追 问</div>
+      <div class="stage-label">阶段 3 · 四 方 支 招</div>
       <div class="stage-title">${escapeHtml(s.title)}</div>
       <div class="stage-subtitle">${escapeHtml(s.prompt)}</div>
       <div>${opts}</div>
@@ -655,6 +658,10 @@ function renderStage5() {
       <div class="funnel-qr"><img src="${escapeHtml(funnel.qrcode)}" alt="二维码"></div>
       <div class="funnel-tag">长按或扫码加入</div>
     </div>
+
+    <div style="margin-top:16px;text-align:center">
+      <a href="../index.html" style="color:var(--primary);text-decoration:none;font-size:13px;font-weight:600">查看往期拆案 →</a>
+    </div>
   `;
 }
 
@@ -681,7 +688,7 @@ ${CFG.subtitle}
   选择：${chose2List.length > 0 ? chose2List.map(o => o.text).join(' / ') : '（未选）'}
   命中关键线索：${hit2}/${critical2Total}
 
-阶段 3 · 场景追问
+阶段 3 · 四方支招
   听取顺序：${chose3List.length > 0 ? chose3List.map(o => o.label).join(' → ') : '（未听）'}
   直觉倾向：${first3 ? first3.label : '—'}
 

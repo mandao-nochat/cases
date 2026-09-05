@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拆案台 · 30 岁事业编的副业困局</title>
+<style>
+:root{
+  --primary:#4D6BFE;
+  --primary-bg:rgba(77,107,254,.08);
+  --primary-bg-soft:#f0f4ff;
+  --primary-dark:#1d4ed8;
+  --text:#0f172a;
+  --text-secondary:#475569;
+  --text-muted:#94a3b8;
+  --bg:#f8faff;
+  --card:#fff;
+  --border:#e9e9eb;
+  --border-light:#f1f5f9;
+  --success:#10b981;
+  --success-bg:rgba(16,185,129,.08);
+  --warning:#f59e0b;
+  --warning-bg:rgba(245,158,11,.08);
+  --danger:#ef4444;
+  --danger-bg:rgba(239,68,68,.06);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;background:var(--bg);color:var(--text);line-height:1.7;-webkit-font-smoothing:antialiased;padding:24px 16px 80px}
+.container{max-width:880px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;margin-bottom:18px;font-size:13px;color:var(--text-muted);font-weight:500}
+.brand-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+.brand-name{color:var(--primary);font-weight:700;letter-spacing:.5px}
+.case-tag{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:1.5px;padding:5px 12px;background:rgba(77,107,254,.12);color:var(--primary-dark);border-radius:9999px;margin-bottom:14px;text-transform:uppercase}
+.case-tag::before{content:"●";font-size:7px;color:var(--warning)}
+.hero{position:relative;padding:32px 28px;background:linear-gradient(135deg,#4D6BFE 0%,#6B8BFF 100%);border-radius:18px;color:#fff;margin-bottom:20px;box-shadow:0 16px 32px -12px rgba(77,107,254,.35);overflow:hidden}
+.hero::after{content:"";position:absolute;top:-50px;right:-50px;width:200px;height:200px;background:radial-gradient(circle,rgba(255,255,255,.16) 0%,transparent 70%);border-radius:50%}
+.hero h1{font-size:26px;font-weight:800;line-height:1.3;margin-bottom:8px;letter-spacing:-.3px}
+.hero .subtitle{font-size:14px;opacity:.92;position:relative;z-index:1}
+.stage-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:28px 24px;margin-bottom:16px;box-shadow:0 4px 6px -1px rgba(0,0,0,.05)}
+.stage-label{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;color:var(--primary);letter-spacing:1.5px;margin-bottom:8px;text-transform:uppercase}
+.stage-label::before{content:"";display:inline-block;width:16px;height:1.5px;background:var(--primary)}
+.stage-title{font-size:20px;font-weight:700;color:var(--text);margin-bottom:6px}
+.stage-subtitle{font-size:13.5px;color:var(--text-secondary);margin-bottom:18px}
+.scene-label{font-size:12px;color:var(--text-muted);background:var(--bg);padding:6px 12px;border-radius:8px;display:inline-block;margin-bottom:14px;border:1px solid var(--border-light)}
+.question-box{padding:20px 22px;background:linear-gradient(135deg,#f0f4ff 0%,#e9efff 100%);border-left:4px solid var(--primary);border-radius:10px;font-size:15.5px;color:var(--text);line-height:1.85;font-weight:500;margin-bottom:14px}
+.hint-card{padding:12px 16px;background:var(--bg);border:1px dashed var(--border);border-radius:10px;font-size:13px;color:var(--text-secondary);margin-bottom:18px}
+.options{display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.option{padding:14px 18px;background:var(--card);border:1.5px solid var(--border-light);border-radius:10px;cursor:pointer;transition:all .15s;font-size:14px;line-height:1.6;display:flex;align-items:flex-start;gap:12px;user-select:none}
+.option:hover{border-color:var(--primary);background:var(--primary-bg-soft)}
+.option.selected{border-color:var(--primary);background:var(--primary-bg-soft);box-shadow:0 0 0 3px rgba(77,107,254,.12)}
+.option.correct{border-color:var(--success);background:var(--success-bg)}
+.option.trap{border-color:var(--border-light);background:var(--bg);opacity:.6}
+.option-critical{border-color:var(--success);background:var(--success-bg)}
+.option-marker{flex-shrink:0;width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--text-muted);background:#fff}
+.option.selected .option-marker{border-color:var(--primary);background:var(--primary);color:#fff}
+.option-correct .option-marker{border-color:var(--success);background:var(--success);color:#fff}
+.option.critical .option-marker{border-color:var(--success);background:var(--success);color:#fff}
+.option-label{flex:1}
+.option-badges{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.badge{font-size:10.5px;font-weight:600;padding:3px 8px;border-radius:6px;letter-spacing:.3px}
+.badge-critical{background:var(--success-bg);color:var(--success);border:1px solid rgba(16,185,129,.25)}
+.badge-trap{background:var(--warning-bg);color:var(--warning);border:1px solid rgba(245,158,11,.25)}
+.badge-missed{background:var(--danger-bg);color:var(--danger);border:1px solid rgba(239,68,68,.3)}
+.option-wrong{border-color:var(--border);background:var(--bg);opacity:.75}
+.option-wrong .option-marker{background:#fff;color:var(--text-muted);border-color:var(--border)}
+.option-missed{border:1.5px dashed var(--danger);background:var(--danger-bg);cursor:default}
+.option-missed .option-marker{background:var(--danger);color:#fff;border-color:var(--danger)}
+.option.locked{cursor:default}
+.feedback{padding:14px 18px;border-radius:10px;font-size:13.5px;line-height:1.75;margin-top:12px;border:1px solid}
+.feedback-good{background:var(--success-bg);border-color:rgba(16,185,129,.3);color:#065f46}
+.feedback-warn{background:var(--warning-bg);border-color:rgba(245,158,11,.3);color:#92400e}
+.feedback-info{background:var(--primary-bg);border-color:rgba(77,107,254,.3);color:var(--primary-dark)}
+.feedback strong{font-weight:700}
+.reveal-list{display:flex;flex-direction:column;gap:10px;margin:12px 0}
+.reveal-item{padding:14px 18px;background:var(--success-bg);border:1px solid rgba(16,185,129,.25);border-radius:10px}
+.reveal-item .ri-title{font-size:13px;font-weight:700;color:var(--success);margin-bottom:4px}
+.reveal-item .ri-body{font-size:13.5px;color:var(--text)}
+.followup-card{padding:18px 20px;background:var(--card);border:1.5px solid var(--border-light);border-radius:12px;margin-bottom:10px;transition:all .2s;cursor:pointer}
+.followup-card.opened{cursor:default}
+.followup-card.critical{border-color:var(--primary);background:var(--primary-bg-soft);box-shadow:0 4px 12px rgba(77,107,254,.1)}
+.fc-label{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--primary-dark)}
+.fc-label::before{content:"▍";color:var(--primary)}
+.fc-thesis{font-size:14.5px;color:var(--text);font-weight:600;margin-bottom:10px;line-height:1.6}
+.fc-quote{padding:10px 14px;background:rgba(77,107,254,.05);border-left:3px solid var(--primary);border-radius:0 8px 8px 0;font-size:13px;color:var(--text-secondary);font-style:italic;margin-bottom:10px;line-height:1.7}
+.fc-result,.fc-verdict{font-size:13px;line-height:1.7;color:var(--text-secondary);margin-top:6px}
+.fc-verdict{font-weight:700;color:var(--primary-dark)}
+.step{padding:16px 20px;background:var(--bg);border:1px solid var(--border-light);border-radius:10px;margin-bottom:10px;opacity:0;transform:translateY(8px);transition:all .4s}
+.step.show{opacity:1;transform:translateY(0)}
+.step .step-title{font-size:14.5px;font-weight:700;color:var(--primary-dark);margin-bottom:6px}
+.step .step-body{font-size:13.5px;color:var(--text-secondary);line-height:1.8}
+
+.tap-hint{position:sticky;top:8px;z-index:20;margin:14px 0 18px;padding:11px 16px;text-align:center;
+  background:rgba(248,250,252,.92);border:1.5px dashed rgba(77,107,254,.45);border-radius:12px;
+  font-size:13.5px;font-weight:600;color:var(--primary);
+  cursor:pointer;user-select:none;animation:tapPulse 2s ease-in-out infinite;
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+@keyframes tapPulse{0%,100%{border-color:rgba(77,107,254,.45);box-shadow:0 0 0 0 rgba(77,107,254,.18)}
+  50%{border-color:rgba(77,107,254,.85);box-shadow:0 0 0 7px rgba(77,107,254,0)}}
+.tap-hint.done{animation:none;border-style:solid;border-color:rgba(16,185,129,.4);background:rgba(16,185,129,.08);color:#059669;cursor:default}
+.quote-card{padding:18px 22px;background:linear-gradient(135deg,#f0f4ff 0%,#e9efff 100%);border-radius:12px;margin-bottom:12px;border-left:4px solid var(--primary)}
+.quote-text{font-size:15px;font-weight:500;color:var(--text);line-height:1.75;margin-bottom:6px;font-style:italic}
+.quote-by{font-size:12px;color:var(--text-muted);text-align:right}
+.funnel-card{background:linear-gradient(135deg,#4D6BFE 0%,#6B8BFF 100%);color:#fff;padding:28px 24px;border-radius:16px;text-align:center;margin-top:20px;box-shadow:0 16px 32px -12px rgba(77,107,254,.4)}
+.funnel-title{font-size:20px;font-weight:700;margin-bottom:8px;letter-spacing:.5px;line-height:1.5}
+.funnel-subtitle{font-size:13.5px;opacity:.92;margin-bottom:18px;line-height:1.7}
+.funnel-qr{display:inline-block;background:#fff;padding:12px;border-radius:12px}
+.funnel-qr img{width:160px;height:160px;display:block;image-rendering:pixelated}
+.funnel-tag{font-size:11px;color:rgba(255,255,255,.75);margin-top:10px;letter-spacing:.5px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:12px 24px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--primary);color:#fff;box-shadow:0 4px 12px rgba(77,107,254,.25)}
+.btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px);box-shadow:0 6px 16px rgba(77,107,254,.3)}
+.btn-primary:disabled{background:var(--border);color:var(--text-muted);cursor:not-allowed;transform:none;box-shadow:none}
+.btn-ghost{background:transparent;color:var(--primary);border:1px solid var(--border)}
+.btn-ghost:hover{background:var(--primary-bg-soft)}
+.btn-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:18px;flex-wrap:wrap}
+.progress-bar{height:4px;background:var(--border-light);border-radius:2px;overflow:hidden;margin-bottom:18px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#4D6BFE,#6B8BFF);transition:width .4s ease;border-radius:2px}
+.report-card{padding:20px 22px;background:var(--card);border:2px dashed var(--primary);border-radius:12px;margin-top:18px}
+.report-title{font-size:14px;font-weight:700;color:var(--primary-dark);margin-bottom:10px}
+.report-content{font-size:13px;color:var(--text);line-height:1.85;white-space:pre-wrap;font-family:'SF Mono','Cascadia Code','Consolas',monospace;background:var(--bg);padding:14px;border-radius:8px;max-height:240px;overflow-y:auto}
+.copy-ok{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--success-bg);color:var(--success);border-radius:8px;font-size:12px;font-weight:600;margin-top:8px;border:1px solid rgba(16,185,129,.3);opacity:0;transition:opacity .3s}
+.copy-ok.show{opacity:1}
+.tag-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.tag{font-size:12px;padding:5px 12px;background:var(--primary-bg);color:var(--primary);border-radius:999px;font-weight:600}
+@media (max-width:600px){
+  body{padding:16px 12px 60px}
+  .hero{padding:24px 20px;border-radius:14px}
+  .hero h1{font-size:22px}
+  .stage-card{padding:22px 18px;border-radius:12px}
+  .question-box{font-size:14.5px;padding:16px 18px}
+  .funnel-qr img{width:140px;height:140px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="brand">
+    <span class="brand-dot"></span>
+    <span class="brand-name">拆案台</span>
+    <span>· 「漫道」群 职场问答系列</span>
+  </div>
+
+  <div id="progress-bar" class="progress-bar" style="display:none">
+    <div id="progress-fill" class="progress-fill" style="width:0%"></div>
+  </div>
+
+  <div id="case-header"></div>
+  <div id="stage-container"></div>
+  <div id="action-row" class="btn-row"></div>
+
+</div>
+
+<script>
+/* ============================================================
+   FALLBACK 配置 —— 当 case-XXX.json 加载失败时使用（本地 file:// 打开时）
+   上线部署时优先用 JSON 配置；本文件保留是为了开箱即跑
+   ============================================================ */
+const FALLBACK_CONFIG = {
+  case_id: "case-001",
+  case_no: 1,
+  title: "30 岁事业编的副业困局",
+  subtitle: "他以为自己卡在「找不到副业」，实际卡在更深的地方",
+  tags: ["副业", "行动力", "家庭责任", "心理建设", "减肥"],
+  stage_0: {
+    title: "一条来稿",
+    scene_label: "「漫道」群 · 第 36 期小会",
+    question_text: "30 岁，新疆小城街道事业编一枚。工作很清闲，最闲的时候每天只干 1 小时。我想搞一份副业，攒点钱，让我妈以后能有点保障。要求不高：不要体力活、不要投太多钱、得能持续做下去。问题是——我看着那些搞副业、自媒体的人，总觉得缥缈得很，自己又不太敢动。法考想考，又怕考不过。能给点建议吗？",
+    hint_card: "读完这条原话，你的直觉是什么？"
+  },
+  stage_1: {
+    title: "信息体检",
+    prompt: "面对这条原话，你会优先追问下面哪些信息？（多选）",
+    options: [
+      { id:"income", text:"工资多少？手头积蓄多少？" },
+      { id:"debt", text:"家里有没有债务？要还多少？" },
+      { id:"body", text:"身体状况怎样？体重、精力、睡眠？" },
+      { id:"skills", text:"他有什么技能或资源？" },
+      { id:"tried", text:"他之前为副业实际尝试过什么？" },
+      { id:"support", text:"他身边有没有能帮上忙的人？" }
+    ],
+    critical_ids: ["debt","body","tried"],
+    reveal: {
+      label: "破案级关键信息",
+      items: [
+        { id:"debt", title:"母亲的债", text:"妈妈多次创业失败 + 遭遇杀猪盘，欠下外债。他已陆续帮还十几万，自己只剩 3 万。" },
+        { id:"body", title:"身体 = 93 公斤", text:"肥胖不只是外形问题——它直接卡住精力、卡住行动力、卡住所有想动的事。" },
+        { id:"tried", title:"什么都没真正动手过", text:"法考畏难、自媒体觉得缥缈……他对每个方向都有理由拒绝。这本身是症状，不是事实。" }
+      ],
+      ignored_warning: "其他三项不是不重要，但优先级被高估了：工资、技能、支持系统——这些是「执行层信息」，但执行者根本还没动起来。"
+    }
+  },
+  stage_2: {
+    title: "线索甄别",
+    prompt: "信息体检做完了。现在让你盯住原话里的一句话，选出你想追问的线索：（多选）",
+    options: [
+      { id:"A", text:"「工作清闲，每天 1 小时」", trap:"陷阱", why_not_first:"看起来是副业的好土壤，但清闲本身不是问题。真正消耗他的不是没时间，是没力气动起来。" },
+      { id:"B", text:"「对自媒体觉得缥缈」", critical:true, why_critical:"这一句是心理症状——不是描述事实，是描述他对未知的畏难。绕开这一句谈副业，就是绕开他动不了的根。" },
+      { id:"C", text:"「与自己的外形和解了」", critical:true, why_critical:"「和解」是当代最危险的两个字之一——它经常是摆烂的雅称。93 公斤的人说和解了，几乎一定是自欺。" },
+      { id:"D", text:"「母亲三婚三离」", trap:"陷阱", why_not_first:"这是已发生的家庭事实，不能改、不是行动起点。重要的不是这件事本身，而是他替母亲还债这件事对他自己的消耗。" }
+    ],
+    teaching: { label:"教学反馈", 核心:"真正的关键线索不在「缺什么」里，而在「他怎么描述自己」里——语气、措辞、那些被轻轻带过的话。" }
+  },
+  stage_3: {
+    title: "场景追问",
+    prompt: "信息版图已经补全。现在代入咨询师的视角——优先追问哪一位的方向？",
+    ask_count_total: 5,
+    ask_count_label: "追问次数",
+    options: [
+      { id:"action", label:"行动派 · 小C", thesis:"先动起来，减肥起号一举多得",
+        quote:"「题主体重摆在那儿，为何不直接减肥起号？减肥本身是刚需，记录过程就是内容，还能激励自己坚持。」",
+        followup_result:"你会得到：一个能马上开始的方案。但如果只停在「动起来」，会忽略他动不起来背后的债务黑洞和精神内耗——3 个月后他又会卡住。",
+        verdict:"局部对，但绕过了真问题" },
+      { id:"pragmatic", label:"务实派 · 老U", thesis:"学个手艺做卤货，私域卖",
+        quote:"「跟我随便学点技术做点吃的卖就行了。增值环节在自己手里，启动成本低，小地方朋友圈卖风险可控。」",
+        followup_result:"你会得到：一个风险极低、能快速正反馈的方案。但 93 公斤的身体，精力可能撑不起每天出摊做卤货。",
+        verdict:"听起来最稳，但他可能根本执行不动" },
+      { id:"skill", label:"技能派 · 何鱼", thesis:"发挥体制内优势，资料/面试/特产",
+        quote:"「把考社工证的经验和资料整理出售；用街道办身份分享体制内面试技巧；用新疆地理优势做特产代购。」",
+        followup_result:"你会得到：一条量身定制的变现路径。但这些方案的共同前提是「先做出来再卖」，对一个连自媒体都觉得缥缈的人，这恰好是难点。",
+        verdict:"方案完美，执行层坍塌" },
+      { id:"root", label:"根源派 · 良师", thesis:"先解决人，再谈副业",
+        quote:"「你最大的风险在于，身体越来越差，可能拖垮自己和母亲。精神越来越疲软，连最简单的事都不愿动手。」",
+        followup_result:"你会得到：真问题——身体和债务循环。但这条最不解渴，因为不直接回答做什么副业。",
+        verdict:"指向破局，但最考验耐心" }
+    ]
+  },
+  stage_4: {
+    title: "拆解展开",
+    subtitle: "信息版图一点点补全——",
+    steps: [
+      { title:"01 · 把问题翻过来", body:"提问者问的是「找什么副业」。但经过前面 3 轮，你会发现这个问题的第一层答案——这不是一个「找什么」的问题，是一个「为什么动不了」的问题。把问题翻过来，是破局的第一步。" },
+      { title:"02 · 物质决定意识", body:"93 公斤不是外形问题，是物质基础。身体沉重→精力低→对所有新事物畏难→更不愿意动→身体更差。一个负反馈回路。群主说：「飞机上先给自己戴氧气面罩，再说其他。」身体就是这个面罩。" },
+      { title:"03 · 识别「假和解」", body:"「和外形和解」「和搞不到钱和解」「和没时间学自媒体和解」——年轻人轻易和这些本可改变的负面状态和解，往往不是豁达，是丧失希望、放弃抗争的摆烂。今天和这个状态和解，明天就动不了一切。" },
+      { title:"04 · 物质 vs 意识的最小回路", body:"教员的逻辑：想发展重工业，要先发展轻工业积累资源。想搞副业，先回到能动的最小回路——对一个 93 公斤、动不了的人来说，这个最小回路就是减肥/恢复健康。每减一斤，精力条就多一格；每多一格，副业才有可能谈。" }
+    ]
+  },
+  stage_5: {
+    title: "揭晓复盘",
+    subtitle: "把这条问到底，答案藏在问题之外。",
+    conclusion: {
+      label: "本案的破局方向",
+      items: [
+        "首要任务不是找副业，是夺回对身体和生活的掌控权。",
+        "从「减肥 / 恢复健康 / 切割财务黑洞」这三件最小的事开始，建立正反馈回路。",
+        "等到身体回来、债务循环止住，再回头挑方案派别——那时每个选项都能跑通。"
+      ]
+    },
+    quotes: [
+      { text:"对智人来说，没有比控制体重更容易做到的事了——因为这个事不需要依赖任何外人，也不需要控制别人。", by:"群主 · 明心" },
+      { text:"哪怕一个残缺的灵魂，都需要一副健康的身体。", by:"群主 · 明心" },
+      { text:"210 减到 160，精力条能翻一倍。", by:"教练 · 小飞" },
+      { text:"只要是做了，就远远大于脑子里只是想做。", by:"群友 · Honye" }
+    ],
+    funnel: {
+      title: "雄关漫道真如铁，而今迈步从头越",
+      subtitle: "如果你也在职场里认真走路——欢迎加入「漫道-只聊工作不聊天」",
+      qrcode: "assets/qrcode.png"
+    }
+  }
+};
+
+/* ============================================================
+   状态管理
+   ============================================================ */
+let CFG = null;
+let STATE = {
+  stage: 0,
+  selected1: new Set(),
+  submitted1: false,
+  locked1: false,
+  selected2: new Set(),
+  submitted2: false,
+  locked2: false,
+  open3Order: [],
+  step4Index: 0,
+  path: []
+};
+
+const TOTAL_STAGES = 6;
+
+async function loadConfig() {
+  try {
+    const res = await fetch('case-001.json?_=' + Date.now());
+    if (res.ok) { CFG = await res.json(); return; }
+  } catch (e) { /* file:// 等场景会失败 */ }
+  CFG = FALLBACK_CONFIG;
+}
+
+function updateProgress() {
+  const bar = document.getElementById('progress-bar');
+  const fill = document.getElementById('progress-fill');
+  if (STATE.stage === 0) { bar.style.display = 'none'; return; }
+  bar.style.display = 'block';
+  const pct = ((STATE.stage) / (TOTAL_STAGES - 1)) * 100;
+  fill.style.width = pct + '%';
+}
+
+function renderHeader() {
+  const h = document.getElementById('case-header');
+  h.innerHTML = `
+    <div class="hero">
+      <div class="case-tag">CASE · 0${CFG.case_no}</div>
+      <h1>${escapeHtml(CFG.title)}</h1>
+      <div class="subtitle">${escapeHtml(CFG.subtitle)}</div>
+    </div>
+  `;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderStage0() {
+  const s = CFG.stage_0;
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 0 · 原 始 问 题</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="question-box">${escapeHtml(s.question_text)}</div>
+      <div class="hint-card">💭 ${escapeHtml(s.hint_card)}</div>
+    </div>
+  `;
+}
+
+function renderStage1() {
+  const s = CFG.stage_1;
+  const submitted = STATE.submitted1;
+  const locked = STATE.locked1;
+
+  const revealMap = {};
+  s.reveal.items.forEach(it => { if (it.id) revealMap[it.id] = it; });
+
+  const opts = s.options.map(o => {
+    const selected = STATE.selected1.has(o.id);
+    const isCritical = s.critical_ids.includes(o.id);
+    const showAsCorrect = submitted && selected && isCritical;
+    const showAsWrong = submitted && selected && !isCritical;
+
+    let cls = 'option';
+    let marker = '';
+    let badge = '';
+    let extra = '';
+
+    if (showAsCorrect) {
+      cls += ' option-correct locked';
+      marker = '✓';
+      badge = '<span class="badge badge-critical">关键命中</span>';
+    } else if (showAsWrong) {
+      cls += ' option-wrong locked';
+      marker = '✕';
+      badge = '<span class="badge badge-trap">非关键</span>';
+    } else if (submitted) {
+      cls += ' locked';
+    } else {
+      if (selected) { cls += ' selected'; marker = '✓'; }
+    }
+
+    if (showAsCorrect && revealMap[o.id]) {
+      extra = `<div style="margin-top:10px;padding:10px 14px;background:var(--success-bg);border-radius:8px;font-size:13px;line-height:1.75;color:var(--text);border:1px solid rgba(16,185,129,.2)">
+        <div style="font-weight:700;color:var(--success);margin-bottom:4px">${escapeHtml(revealMap[o.id].title)}</div>
+        ${escapeHtml(revealMap[o.id].text)}
+      </div>`;
+    } else if (showAsWrong) {
+      extra = `<div style="margin-top:10px;padding:10px 14px;background:var(--warning-bg);border-radius:8px;font-size:13px;color:#92400e;line-height:1.75;border:1px solid rgba(245,158,11,.25)">
+        这一条不是破案关键。你勾出来说明在关心别的事——回到原话再看看，哪个线索最该先追问？
+      </div>`;
+    }
+
+    const handler = submitted ? '' : `onclick="toggleStage1('${o.id}')"`;
+    return `<div class="${cls}" ${handler}>
+      <span class="option-marker">${marker}</span>
+      <span class="option-label">
+        ${escapeHtml(o.text)}
+        ${badge ? `<div class="option-badges">${badge}</div>` : ''}
+        ${extra}
+      </span>
+    </div>`;
+  }).join('');
+
+  let feedback = '';
+  if (submitted && !locked) {
+    const hit = Array.from(STATE.selected1).filter(id => s.critical_ids.includes(id)).length;
+    const need = s.critical_ids.length - hit;
+    feedback = `<div class="feedback feedback-warn">
+      <strong>命中 ${hit} / ${s.critical_ids.length}。</strong> 还差 ${need} 项关键问题——调整一下再试。
+    </div>`;
+  } else if (locked) {
+    feedback = `<div class="feedback feedback-good">
+      <strong>全部命中。</strong> 三个支点都抓到了——可以往下走。
+    </div>`;
+  }
+
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 1 · 信 息 体 检</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="stage-subtitle">${escapeHtml(s.prompt)}</div>
+      <div class="options" id="stage1-options">${opts}</div>
+      ${feedback}
+      ${locked ? renderReveal(s) : ''}
+    </div>
+  `;
+}
+
+function renderReveal(s) {
+  return `
+    <div class="reveal-list">
+      ${s.reveal.items.map(it => `
+        <div class="reveal-item">
+          <div class="ri-title">✓ ${escapeHtml(it.title)}</div>
+          <div class="ri-body">${escapeHtml(it.text)}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div class="feedback feedback-info">${escapeHtml(s.reveal.ignored_warning)}</div>
+  `;
+}
+
+function toggleStage1(id) {
+  if (STATE.submitted1) return;
+  if (STATE.selected1.has(id)) STATE.selected1.delete(id);
+  else STATE.selected1.add(id);
+  render();
+}
+
+function renderStage2() {
+  const s = CFG.stage_2;
+  const submitted = STATE.submitted2;
+  const locked = STATE.locked2;
+  const criticalTotal = s.options.filter(o => o.critical).length;
+
+  const opts = s.options.map(o => {
+    const selected = STATE.selected2.has(o.id);
+    const showAsCorrect = submitted && selected && o.critical;
+    const showAsWrong = submitted && selected && !o.critical;
+
+    let cls = 'option';
+    let marker = '';
+    let badge = '';
+    let extra = '';
+
+    if (showAsCorrect) {
+      cls += ' option-correct locked';
+      marker = '✓';
+      badge = '<span class="badge badge-critical">关键线索</span>';
+      extra = `<div style="margin-top:10px;padding:10px 14px;background:var(--success-bg);border-radius:8px;font-size:13px;line-height:1.75;color:var(--text);border:1px solid rgba(16,185,129,.2)">
+        ${escapeHtml(o.why_critical)}
+      </div>`;
+    } else if (showAsWrong) {
+      cls += ' option-wrong locked';
+      marker = '✕';
+      badge = '<span class="badge badge-trap">选错了</span>';
+      extra = `<div style="margin-top:10px;padding:10px 14px;background:var(--warning-bg);border-radius:8px;font-size:13px;color:#92400e;line-height:1.75;border:1px solid rgba(245,158,11,.25)">
+        这一条是陷阱——不是关键线索。
+      </div>`;
+    } else if (locked && o.trap) {
+      cls += ' option-wrong locked';
+      marker = '✕';
+      badge = '<span class="badge badge-trap">陷阱</span>';
+      extra = `<div style="margin-top:10px;padding:10px 14px;background:var(--warning-bg);border-radius:8px;font-size:13px;color:#92400e;line-height:1.75;border:1px solid rgba(245,158,11,.25)">
+        ${escapeHtml(o.why_not_first)}
+      </div>`;
+    } else if (submitted || locked) {
+      cls += ' locked';
+    } else {
+      if (selected) { cls += ' selected'; marker = '✓'; }
+    }
+
+    const handler = (submitted || locked) ? '' : `onclick="toggleStage2('${o.id}')"`;
+    return `<div class="${cls}" ${handler}>
+      <span class="option-marker">${marker}</span>
+      <span class="option-label">
+        ${escapeHtml(o.text)}
+        ${badge ? `<div class="option-badges">${badge}</div>` : ''}
+        ${extra}
+      </span>
+    </div>`;
+  }).join('');
+
+  let feedback = '';
+  if (submitted && !locked) {
+    const hit = s.options.filter(o => STATE.selected2.has(o.id) && o.critical).length;
+    feedback = `<div class="feedback feedback-warn">
+      <strong>命中 ${hit} / ${criticalTotal} 条关键线索。</strong> 再想想还有没有？
+    </div>`;
+  } else if (locked) {
+    feedback = `<div class="feedback feedback-good">
+      <strong>两条关键线索都找到了。</strong>
+    </div>
+    <div class="feedback feedback-info" style="margin-top:10px">
+      <strong>${escapeHtml(s.teaching.label)} · </strong>${escapeHtml(s.teaching.核心)}
+    </div>`;
+  }
+
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 2 · 线 索 甄 别</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="stage-subtitle">${escapeHtml(s.prompt)}</div>
+      <div class="options">${opts}</div>
+      ${feedback}
+    </div>
+  `;
+}
+
+function toggleStage2(id) {
+  if (STATE.submitted2 || STATE.locked2) return;
+  if (STATE.selected2.has(id)) STATE.selected2.delete(id);
+  else STATE.selected2.add(id);
+  render();
+}
+
+function submitStage2() {
+  if (STATE.locked2) return;
+  if (STATE.selected2.size < 1) return;
+  const total = CFG.stage_2.options.filter(o => o.critical).length;
+  const hit = CFG.stage_2.options.filter(o => STATE.selected2.has(o.id) && o.critical).length;
+  STATE.submitted2 = true;
+  if (hit === total) {
+    STATE.locked2 = true;
+    STATE.path.push({ stage: 2, choices: Array.from(STATE.selected2), complete: true });
+  } else {
+    STATE.path.push({ stage: 2, choices: Array.from(STATE.selected2), complete: false });
+  }
+  render();
+}
+
+function resetStage2() {
+  STATE.submitted2 = false;
+  STATE.locked2 = false;
+  STATE.selected2 = new Set();
+  render();
+}
+
+function renderStage3() {
+  const s = CFG.stage_3;
+  const opened = STATE.open3Order.length;
+  const total = s.options.length;
+
+  const opts = s.options.map(o => {
+    const isOpen = STATE.open3Order.includes(o.id);
+    const cls = isOpen ? 'followup-card critical opened' : 'followup-card';
+    return `<div class="${cls}" ${isOpen ? '' : `onclick="openStage3('${o.id}')"`}>
+      <div class="fc-label">${escapeHtml(o.label)}${isOpen ? ' <span style="font-weight:400;color:var(--success);font-size:11px">✓ 已听</span>' : ''}</div>
+      <div class="fc-thesis">${escapeHtml(o.thesis)}</div>
+      <div class="fc-quote">${escapeHtml(o.quote)}</div>
+      ${isOpen ? `
+        <div class="fc-result">👉 ${escapeHtml(o.followup_result)}</div>
+        <div class="fc-verdict">⚖️ ${escapeHtml(o.verdict)}</div>
+      ` : ''}
+    </div>`;
+  }).join('');
+
+  let feedback = '';
+  if (opened > 0 && opened < total) {
+    feedback = `<div class="feedback feedback-info">
+      已听 <strong>${opened} / ${total}</strong> 个派别——每个都听完，再做判断。
+    </div>`;
+  } else if (opened === total) {
+    feedback = `<div class="feedback feedback-good">
+      <strong>四个派别都听完了。</strong> 你心里应该有倾向了——下一步看拆解。
+    </div>`;
+  }
+
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 3 · 场 景 追 问</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="stage-subtitle">${escapeHtml(s.prompt)}</div>
+      <div>${opts}</div>
+      ${feedback}
+    </div>
+  `;
+}
+
+function openStage3(id) {
+  if (STATE.open3Order.includes(id)) return;
+  STATE.open3Order.push(id);
+  render();
+}
+
+function renderStage4() {
+  const s = CFG.stage_4;
+  const total = s.steps.length;
+  const allShown = STATE.step4Index >= total - 1;
+  const stepsHtml = s.steps.map((step, i) => {
+    const show = i <= STATE.step4Index;
+    return `<div class="step ${show ? 'show' : ''}">
+      <div class="step-title">${escapeHtml(step.title)}</div>
+      <div class="step-body">${escapeHtml(step.body)}</div>
+    </div>`;
+  }).join('');
+
+  const hint = allShown
+    ? `<div class="tap-hint done">✓ 分析全部展开 —— 可以揭晓结论了</div>`
+    : `<div class="tap-hint"><span class="tap-arrow">👆</span>点击屏幕任意位置，继续展开（${STATE.step4Index + 1}/${total}）</div>`;
+
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 4 · 拆 解 展 开</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="stage-subtitle">${escapeHtml(s.subtitle)}</div>
+      ${hint}
+      <div>${stepsHtml}</div>
+    </div>
+  `;
+}
+
+function nextStep4() {
+  const total = CFG.stage_4.steps.length;
+  if (STATE.step4Index < total - 1) {
+    STATE.step4Index++;
+    render();
+  }
+}
+
+function renderStage5() {
+  const s = CFG.stage_5;
+  const conclusionItems = s.conclusion.items.map(t => `<li style="margin-bottom:8px">${escapeHtml(t)}</li>`).join('');
+  const quotesHtml = s.quotes.map(q => `
+    <div class="quote-card">
+      <div class="quote-text">"${escapeHtml(q.text)}"</div>
+      <div class="quote-by">— ${escapeHtml(q.by)}</div>
+    </div>
+  `).join('');
+
+  const report = buildReport();
+  const funnel = s.funnel;
+
+  return `
+    <div class="stage-card">
+      <div class="stage-label">阶段 5 · 揭 晓 复 盘</div>
+      <div class="stage-title">${escapeHtml(s.title)}</div>
+      <div class="stage-subtitle">${escapeHtml(s.subtitle)}</div>
+      <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;letter-spacing:.5px">▍ ${escapeHtml(s.conclusion.label)}</div>
+      <ul style="padding-left:20px;margin-bottom:18px">${conclusionItems}</ul>
+
+      <div style="font-size:13px;font-weight:700;color:var(--primary);margin-bottom:10px;letter-spacing:.5px">▍ 金句时刻</div>
+      <div style="margin-bottom:18px">${quotesHtml}</div>
+
+      <div class="report-card">
+        <div class="report-title">📋 我的拆案报告</div>
+        <div class="report-content" id="report-content">${escapeHtml(report)}</div>
+        <div class="copy-ok" id="copy-ok">✓ 已复制</div>
+        <div style="margin-top:10px">
+          <button class="btn btn-ghost" onclick="copyReport()">复制报告</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="funnel-card">
+      <div class="funnel-title">${escapeHtml(funnel.title)}</div>
+      <div class="funnel-subtitle">${escapeHtml(funnel.subtitle)}</div>
+      <div class="funnel-qr"><img src="${escapeHtml(funnel.qrcode)}" alt="二维码"></div>
+      <div class="funnel-tag">长按或扫码加入</div>
+    </div>
+  `;
+}
+
+function buildReport() {
+  const s1 = CFG.stage_1;
+  const s2 = CFG.stage_2;
+  const s3 = CFG.stage_3;
+  const picked1 = s1.options.filter(o => STATE.selected1.has(o.id)).map(o => o.text);
+  const hit1 = picked1.filter(t => s1.options.find(o => o.text === t && s1.critical_ids.includes(o.id)));
+  const chose2List = s2.options.filter(o => STATE.selected2.has(o.id));
+  const hit2 = chose2List.filter(o => o.critical).length;
+  const critical2Total = s2.options.filter(o => o.critical).length;
+  const chose3List = STATE.open3Order.map(id => s3.options.find(o => o.id === id)).filter(Boolean);
+  const first3 = chose3List[0];
+
+  return `【拆案台 · Case 0${CFG.case_no}】${CFG.title}
+${CFG.subtitle}
+
+阶段 1 · 信息体检
+  追问：${picked1.length > 0 ? picked1.join(' / ') : '（未选）'}
+  命中关键：${hit1.length}/${s1.critical_ids.length}
+
+阶段 2 · 线索甄别
+  选择：${chose2List.length > 0 ? chose2List.map(o => o.text).join(' / ') : '（未选）'}
+  命中关键线索：${hit2}/${critical2Total}
+
+阶段 3 · 场景追问
+  听取顺序：${chose3List.length > 0 ? chose3List.map(o => o.label).join(' → ') : '（未听）'}
+  直觉倾向：${first3 ? first3.label : '—'}
+
+— 拆案完成 · 生成于 ${new Date().toLocaleDateString('zh-CN')}`;
+}
+
+async function copyReport() {
+  const text = document.getElementById('report-content').textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (e) {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  }
+  const ok = document.getElementById('copy-ok');
+  ok.classList.add('show');
+  setTimeout(() => ok.classList.remove('show'), 1800);
+}
+
+function renderActions() {
+  const row = document.getElementById('action-row');
+  let html = '';
+  if (STATE.stage === 0) {
+    html = `<button class="btn btn-primary" onclick="goNext()">开始拆案 →</button>`;
+  } else if (STATE.stage === 1) {
+    if (STATE.locked1) {
+      html = `<span></span><button class="btn btn-primary" onclick="goNext()">下一步 →</button>`;
+    } else if (STATE.submitted1) {
+      html = `<button class="btn btn-ghost" onclick="resetStage1()">↺ 重新选择</button><button class="btn btn-primary" onclick="submitStage1()" ${STATE.selected1.size < 1 ? 'disabled' : ''}>重新提交</button>`;
+    } else {
+      html = `<span></span><button class="btn btn-primary" onclick="submitStage1()" ${STATE.selected1.size < 1 ? 'disabled' : ''}>提交体检</button>`;
+    }
+  } else if (STATE.stage === 2) {
+    if (STATE.locked2) {
+      html = `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" onclick="goNext()">下一步 →</button>`;
+    } else if (STATE.submitted2) {
+      html = `<button class="btn btn-ghost" onclick="resetStage2()">↺ 重新选择</button><button class="btn btn-primary" onclick="submitStage2()" ${STATE.selected2.size < 1 ? 'disabled' : ''}>重新提交</button>`;
+    } else {
+      html = `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" onclick="submitStage2()" ${STATE.selected2.size < 1 ? 'disabled' : ''}>提交甄别</button>`;
+    }
+  } else if (STATE.stage === 3) {
+    const total = CFG.stage_3.options.length;
+    const opened = STATE.open3Order.length;
+    if (opened >= total) {
+      html = `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" onclick="goNext()">下一步 →</button>`;
+    } else {
+      html = `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" disabled>还剩 ${total - opened} 个派别未听</button>`;
+    }
+  } else if (STATE.stage === 4) {
+    const total = CFG.stage_4.steps.length;
+    const allShown = STATE.step4Index >= total - 1;
+    html = allShown
+      ? `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" onclick="goNext()">揭晓结论 →</button>`
+      : `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" disabled>揭晓结论（还有 ${total - 1 - STATE.step4Index} 步未展开）</button>`;
+  } else if (STATE.stage === 5) {
+    html = `<button class="btn btn-ghost" onclick="prev()">← 上一步</button><button class="btn btn-primary" onclick="restart()">🔄 再拆一次</button>`;
+  }
+  row.innerHTML = html;
+}
+
+function submitStage1() {
+  if (STATE.locked1) return;
+  if (STATE.selected1.size < 1) return;
+  const hit = Array.from(STATE.selected1).filter(id => CFG.stage_1.critical_ids.includes(id)).length;
+  STATE.submitted1 = true;
+  if (hit === CFG.stage_1.critical_ids.length) {
+    STATE.locked1 = true;
+    STATE.path.push({ stage: 1, choices: Array.from(STATE.selected1), complete: true });
+  } else {
+    STATE.path.push({ stage: 1, choices: Array.from(STATE.selected1), complete: false });
+  }
+  render();
+}
+
+function resetStage1() {
+  STATE.submitted1 = false;
+  STATE.locked1 = false;
+  STATE.selected1 = new Set();
+  render();
+}
+
+function goNext() {
+  if (STATE.stage < TOTAL_STAGES - 1) {
+    STATE.stage++;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function prev() {
+  if (STATE.stage > 0) {
+    STATE.stage--;
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function restart() {
+  STATE = { stage: 0, selected1: new Set(), submitted1: false, locked1: false, selected2: new Set(), submitted2: false, locked2: false, open3Order: [], step4Index: 0, path: [] };
+  render();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function render() {
+  updateProgress();
+  let html = '';
+  if (STATE.stage === 0) html = renderStage0();
+  else if (STATE.stage === 1) html = renderStage1();
+  else if (STATE.stage === 2) html = renderStage2();
+  else if (STATE.stage === 3) html = renderStage3();
+  else if (STATE.stage === 4) html = renderStage4();
+  else if (STATE.stage === 5) html = renderStage5();
+  document.getElementById('stage-container').innerHTML = html;
+  renderActions();
+}
+
+// 阶段 4：点击屏幕任意位置（按钮除外）继续展开
+document.addEventListener('click', (e) => {
+  if (STATE.stage !== 4) return;
+  if (e.target.closest('button')) return;
+  const total = CFG.stage_4.steps.length;
+  if (STATE.step4Index < total - 1) nextStep4();
+});
+
+(async function init() {
+  await loadConfig();
+  renderHeader();
+  render();
+})();
+</script>
+</body>
+</html>
